@@ -2,7 +2,7 @@
 
 A full end-to-end Business Intelligence project analysing inpatient hospital performance across **operational**, **clinical**, and **financial** domains over a 24-month period (January 2023 – December 2024).
 
-Built with **PostgreSQL**, **pgAdmin**, and **Tableau Desktop** — from raw data to executive-ready dashboards.
+Built with **PostgreSQL**, **pgAdmin**, and **Tableau Desktop**, from raw data to executive-ready dashboards.
 
 ---
 
@@ -30,7 +30,7 @@ Built with **PostgreSQL**, **pgAdmin**, and **Tableau Desktop** — from raw dat
 
 ## Project Overview
 
-This capstone project simulates a real-world BI engagement where a tertiary hospital is experiencing operational pressure — prolonged patient stays, rising readmission rates, bed occupancy concerns, and declining revenue. The goal was to investigate these concerns using data, build interactive dashboards for executive stakeholders, and deliver evidence-based recommendations.
+This capstone project simulates a real-world BI engagement where a tertiary hospital is experiencing operational pressure: prolonged patient stays, rising readmission rates, bed occupancy concerns, and declining revenue. The goal was to investigate these concerns using data, build interactive dashboards for executive stakeholders, and deliver evidence-based recommendations.
 
 **Scope:** Inpatient encounters only, filtered to January 2023 – December 2024.
 
@@ -255,7 +255,7 @@ SELECT 'procedures'        AS table_name, COUNT(*) AS row_count FROM procedures
 | financial_summary | 936,099 |
 | procedures | 2,441,702 |
 
-✅ `encounters` and `financial_summary` match exactly — confirming one financial record per encounter.
+✅ `encounters` and `financial_summary` match exactly, confirming one financial record per encounter.
 
 ### Encounter Class Check
 
@@ -276,7 +276,7 @@ ORDER BY count DESC
 | emergency | 43,536 |
 | **inpatient** | **16,612** |
 
-Only **16,612 inpatient encounters** — the rest are outpatient. All analysis was filtered to this subset.
+Only **16,612 inpatient encounters**, the rest are outpatient. All analysis was filtered to this subset.
 
 ---
 
@@ -284,7 +284,7 @@ Only **16,612 inpatient encounters** — the rest are outpatient. All analysis w
 
 ### Thought Process
 
-Most charts were built directly in Tableau by connecting to raw tables. However, readmission analysis requires a **self-join** (comparing each encounter against subsequent encounters for the same patient) — something that can't be done natively in Tableau's drag-and-drop interface. I solved this by pre-building two PostgreSQL views using **window functions**.
+Most charts were built directly in Tableau by connecting to raw tables. However, readmission analysis requires a **self-join** (comparing each encounter against subsequent encounters for the same patient) this can't be done natively in Tableau's drag-and-drop interface. I solved this by pre-building two PostgreSQL views using **window functions**.
 
 I used the `LEAD()` window function instead of a self-join because it is more efficient, cleaner to read, and easier to audit.
 
@@ -514,7 +514,7 @@ These calculated fields were created in Tableau to support the analysis:
 | Insurance % | 95.18% | Calculated field |
 | Patient % | 4.82% | Calculated field |
 
-> **Note on filters:** Financial dashboards use the same inpatient + date filters as Dashboards 1 and 2, as confirmed by the project instructor.
+> **Note on filters:** Financial dashboards use the same inpatient + date filters as Dashboards 1 and 2.
 
 ### Charts Built
 
@@ -541,14 +541,14 @@ These calculated fields were created in Tableau to support the analysis:
 ## Key Findings
 
 ### Operational
-- **Internal Medicine** handles **85.5%** of all inpatient encounters (1,630 of 1,907) with an ALOS of **5.2 days** — exceeding the hospital average of 4.9 days
+- **Internal Medicine** handles **85.5%** of all inpatient encounters (1,630 of 1,907) with an ALOS of **5.2 days**, exceeding the hospital average of 4.9 days
 - Only 3 departments have inpatient activity: Internal Medicine, Surgery, and O.G
 - Monthly encounter volume is volatile (65–96 per month) with no clear trend
 
 ### Clinical
 - **Dependent Drug Abuse** (437 encounters) and **Non-Small Cell Lung Carcinoma** (420 encounters) together account for **45% of all inpatient admissions**
 - The hospital-wide **30-day readmission rate is 6.87%** (131 of 1,907 encounters)
-- **Non-Small Cell Lung Carcinoma has a 24.76% readmission rate** — 1 in 4 patients returns within 30 days
+- **Non-Small Cell Lung Carcinoma has a 24.76% readmission rate**, 1 in 4 patients returns within 30 days
 - This single diagnosis accounts for **104 of 131 total readmissions (79.4%)**
 - Dependent Drug Abuse has **zero readmissions** despite being the highest-volume diagnosis
 
@@ -594,24 +594,24 @@ These calculated fields were created in Tableau to support the analysis:
 ### What I Learned
 
 **On data engineering:**
-- Foreign key dependency order matters when creating tables — always create parent tables before child tables
+- Foreign key dependency order matters when creating tables, i learnt to always create parent tables before child tables
 - Tableau's Relationships model (vs. Joins) prevents row duplication when connecting one-to-many tables like `procedures`
 - Window functions (`LEAD()`) are more elegant and performant than self-joins for sequential event analysis
 
 **On Tableau:**
 - Data source filters applied to "All Using This Data Source" provide a clean, consistent filter across all sheets without manual repetition
-- Continuous date axes can collapse years — a calculated string field (`Month Year Label`) paired with a numeric sort field (`Month Sort`) solves this reliably
-- `financial_summary` fields weren't appearing in Measure Values because they live in a secondary table — dragging them directly from the Data pane was the workaround
+- Continuous date axes can collapse years,  a calculated string field (`Month Year Label`) paired with a numeric sort field (`Month Sort`) solves this reliably
+- `financial_summary` fields weren't appearing in Measure Values because they live in a secondary table, dragging them directly from the Data pane was the workaround
 - Diverging colour palettes centred at the benchmark value (e.g., 4.9 days for ALOS) are more informative than single-colour encoding
 
 **On analysis:**
-- The hospital average ALOS (4.9 days) and per-department average ALOS are different things — the overall average is weighted by volume, not a simple mean of department averages
-- Readmission rate concentration matters as much as the overall rate — a 6.87% overall rate masked a 24.76% rate for a single diagnosis
-- Absence of readmissions (Drug Abuse: 0%) is not necessarily good news — it may reflect disconnection from community care rather than successful treatment
+- The hospital average ALOS (4.9 days) and per-department average ALOS are different things, the overall average is weighted by volume, not a simple mean of department averages
+- Readmission rate concentration matters as much as the overall rate, a 6.87% overall rate masked a 24.76% rate for a single diagnosis
+- Absence of readmissions (Drug Abuse: 0%) is not necessarily good news, it may reflect disconnection from community care rather than successful treatment
 
 ### Design Decisions
 
-- **Direct table connections over Custom SQL** for most charts — keeps the workbook maintainable and avoids Tableau's unrelated-tables join errors
+- **Direct table connections over Custom SQL** for most charts - keeps the workbook maintainable and avoids Tableau's unrelated-tables join errors
 - **SQL views only for readmission** — the self-referential logic required for readmission detection genuinely cannot be replicated in Tableau's data source pane
 - **Hardcoded date filter** over relative date filter — more predictable behaviour with historical datasets
 - **Insight-driven chart titles** over generic labels — e.g., "Internal Medicine Exceeds the Hospital Average ALOS of 4.9 Days" instead of "Department ALOS"
